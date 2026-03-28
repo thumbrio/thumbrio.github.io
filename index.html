@@ -108,41 +108,73 @@ transform:scale(1.05);
 box-shadow:0 0 25px rgba(0,0,0,0.7);
 }
 
-/* PRICING */
-.pricing{display:flex;gap:30px;flex-wrap:wrap;}
-.card{
-flex:1;
-min-width:250px;
-padding:30px;
-border:1px solid #1f1f1f;
-border-radius:12px;
-transition:0.3s;
+/* BEFORE AFTER */
+.compare-container,
+.compare-container * {
+  user-select: none;
+  -webkit-user-select: none;
 }
-.card.featured{border:2px solid #facc15;}
-.card:hover{transform:translateY(-5px);}
-.price{font-size:2rem;margin:10px 0;color:#facc15;}
 
-/* LIGHTBOX */
-.lightbox{
-position:fixed;
+.compare-container{
+position:relative;
+max-width:700px;
+margin:auto;
+overflow:hidden;
+border-radius:12px;
+}
+
+.compare-container img{
+width:100%;
+display:block;
+}
+
+.img-before{
+position:absolute;
 top:0;
 left:0;
-width:100%;
 height:100%;
-background:rgba(0,0,0,0.9);
-display:none;
-align-items:center;
-justify-content:center;
-z-index:2000;
+width:100%;
+clip-path: inset(0 50% 0 0);
 }
-.lightbox img{
-max-width:90%;
-max-height:90%;
-border-radius:10px;
+
+.slider{
+position:absolute;
+top:0;
+left:50%;
+width:7px;
+height:100%;
+background:#facc15;
+cursor:ew-resize;
+z-index:2;
 }
-.lightbox.active{
-display:flex;
+
+/* HANDLE */
+.slider::after{
+content:'';
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%, -50%);
+width:40px;
+height:40px;
+background:#facc15;
+border-radius:50%;
+border:5px solid white;
+box-shadow:0 0 10px rgba(250,204,21,0.7);
 }
+
+/* LABELS */
+.compare-label{
+position:absolute;
+top:10px;
+padding:6px 12px;
+background:rgba(0,0,0,0.6);
+border-radius:6px;
+font-size:0.9rem;
+}
+
+.label-before{left:10px;}
+.label-after{right:10px;}
 
 /* FOOTER */
 .footer{
@@ -162,7 +194,6 @@ color:#777;
 <a href="#home">Home</a>
 <a href="#service">Service</a>
 <a href="#portfolio">Portfolio</a>
-<a href="#pricing">Pricing</a>
 <a href="#contact">Contact</a>
 </div>
 </nav>
@@ -177,25 +208,21 @@ color:#777;
 </div>
 
 <div class="hero-preview">
-<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/fortnite.jpg">
+<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/FortniteThumb.jpg">
 </div>
 </header>
 
 <!-- SERVICE -->
 <section id="service" class="section">
 <h2>What I Do</h2>
-
 <div class="service-box">
 <h3>Professional Thumbnail Design</h3>
-<p>
-I create thumbnails designed to maximize clicks using bold visuals, contrast, and proven high-performing styles.
-</p>
-
+<p>I create thumbnails designed to maximize clicks using bold visuals, contrast, and proven styles.</p>
 <ul class="service-list">
 <li>✔ Custom for your content</li>
 <li>✔ Optimized for mobile</li>
 <li>✔ Fast turnaround</li>
-<li>✔ Clean, high-converting design</li>
+<li>✔ Clean design</li>
 </ul>
 </div>
 </section>
@@ -203,37 +230,28 @@ I create thumbnails designed to maximize clicks using bold visuals, contrast, an
 <!-- PORTFOLIO -->
 <section id="portfolio" class="section">
 <h2>My Work</h2>
-
 <div class="gallery">
 <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/fortnite.jpg">
 <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/New_Thumbnail____1-thumbnail.jpg">
 <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/FortniteThumb.jpg">
 </div>
-
 </section>
 
-<!-- PRICING -->
-<section id="pricing" class="section">
-<h2>Pricing</h2>
+<!-- BEFORE AFTER -->
+<section class="section">
+<h2>Before vs After</h2>
 
-<div class="pricing">
-<div class="card">
-<h3>Per Thumbnail</h3>
-<div class="price">$5</div>
-<p>Single Thumbnail</p>
-</div>
+<div class="compare-container">
 
-<div class="card featured">
-<h3>Monthly</h3>
-<div class="price">$70/mth</div>
-<p>Best Value - if you have a high upload rate, this option may reduce the price of a single thumbnail to $3</p>
-</div>
+<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/New_Thumbnail-thumbnail%20(6).jpg">
 
-<div class="card">
-<h3>Referral Discount</h3>
-<div class="price"> Permanent 15% Discount, 5 Free Thumbnails </div>
-<p>Refer a Friend to Thumbrio That Becomes a Customer - Capping out at 1 Friend</p>
-</div>
+<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/New_Thumbnail-thumbnail%20(4).jpg" class="img-before" id="beforeImg">
+
+<div class="compare-label label-before">BEFORE</div>
+<div class="compare-label label-after">AFTER</div>
+
+<div class="slider" id="slider"></div>
+
 </div>
 </section>
 
@@ -247,33 +265,33 @@ I create thumbnails designed to maximize clicks using bold visuals, contrast, an
 <p>Contact: aithumbnailer@gmail.com</p>
 </div>
 
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox">
-<img src="" id="lightbox-img">
-</div>
-
 <script>
-// smooth scroll
-document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
-anchor.addEventListener('click',function(e){
-e.preventDefault();
-document.querySelector(this.getAttribute('href')).scrollIntoView({behavior:'smooth'});
-});
+// BEFORE AFTER SLIDER
+const slider = document.getElementById('slider');
+const beforeImg = document.getElementById('beforeImg');
+
+let isDragging = false;
+
+slider.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  e.preventDefault();
 });
 
-// LIGHTBOX
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = document.getElementById('lightbox-img');
+window.addEventListener('mouseup', () => isDragging = false);
 
-document.querySelectorAll('.gallery img').forEach(img=>{
-img.addEventListener('click',()=>{
-lightbox.classList.add('active');
-lightboxImg.src = img.src;
-});
-});
+window.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
 
-lightbox.addEventListener('click',()=>{
-lightbox.classList.remove('active');
+  const rect = slider.parentElement.getBoundingClientRect();
+  let x = e.clientX - rect.left;
+
+  if (x < 0) x = 0;
+  if (x > rect.width) x = rect.width;
+
+  let percent = (x / rect.width) * 100;
+
+  slider.style.left = percent + '%';
+  beforeImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
 });
 </script>
 
