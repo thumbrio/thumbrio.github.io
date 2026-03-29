@@ -108,13 +108,34 @@ transform:scale(1.05);
 box-shadow:0 0 25px rgba(0,0,0,0.7);
 }
 
-/* BEFORE AFTER */
-.compare-container,
-.compare-container * {
-  user-select: none;
-  -webkit-user-select: none;
+/* MODAL */
+.modal{
+display:none;
+position:fixed;
+z-index:2000;
+left:0;
+top:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.75);
 }
 
+.modal-content{
+background:#0a0a0a;
+margin:5% auto;
+padding:30px;
+width:80%;
+max-width:1000px;
+border-radius:12px;
+}
+
+.close{
+float:right;
+font-size:30px;
+cursor:pointer;
+}
+
+/* BEFORE AFTER */
 .compare-container{
 position:relative;
 max-width:700px;
@@ -148,7 +169,6 @@ cursor:ew-resize;
 z-index:2;
 }
 
-/* HANDLE */
 .slider::after{
 content:'';
 position:absolute;
@@ -160,10 +180,8 @@ height:40px;
 background:#facc15;
 border-radius:50%;
 border:5px solid white;
-box-shadow:0 0 10px rgba(250,204,21,0.7);
 }
 
-/* LABELS */
 .compare-label{
 position:absolute;
 top:10px;
@@ -189,7 +207,6 @@ transition:0.3s;
 .card.featured{border:2px solid #facc15;}
 .card:hover{transform:translateY(-5px);}
 .price{font-size:2rem;margin:10px 0;color:#facc15;}
-
 
 /* FOOTER */
 .footer{
@@ -246,34 +263,45 @@ color:#777;
 <section id="portfolio" class="section">
 <h2>My Work</h2>
 <div class="gallery">
+<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/fortnite.jpg" onclick="openModal()">
+<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/New_Thumbnail____1-thumbnail.jpg" onclick="openModal()">
+<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/FortniteThumb.jpg" onclick="openModal()">
+</div>
+</section>
+
+<!-- MODAL -->
+<div id="portfolioModal" class="modal">
+<div class="modal-content">
+<span class="close" onclick="closeModal()">&times;</span>
+<h2>Full Portfolio</h2>
+
+<div class="gallery">
 <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/fortnite.jpg">
 <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/New_Thumbnail____1-thumbnail.jpg">
 <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/FortniteThumb.jpg">
+<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/New_Thumbnail-thumbnail%20(4).jpg">
+<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/New_Thumbnail-thumbnail%20(6).jpg">
 </div>
-</section>
+
+</div>
+</div>
 
 <!-- BEFORE AFTER -->
 <section class="section">
 <h2>Before vs After</h2>
 
 <div class="compare-container">
-
 <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/New_Thumbnail-thumbnail%20(6).jpg">
-
 <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/New_Thumbnail-thumbnail%20(4).jpg" class="img-before" id="beforeImg">
-
 <div class="compare-label label-before">BEFORE</div>
 <div class="compare-label label-after">AFTER</div>
-
 <div class="slider" id="slider"></div>
-
 </div>
 </section>
 
 <!-- PRICING -->
 <section id="pricing" class="section">
 <h2>Pricing</h2>
-
 <div class="pricing">
 <div class="card">
 <h3>Per Thumbnail</h3>
@@ -284,13 +312,13 @@ color:#777;
 <div class="card featured">
 <h3>Monthly</h3>
 <div class="price">$70/mth</div>
-<p>Best Value - if you have a high upload rate, this option may reduce the price of a single thumbnail to $3</p>
+<p>Best Value</p>
 </div>
 
 <div class="card">
 <h3>Referral Discount</h3>
-<div class="price"> Permanent 15% Discount, 5 Free Thumbnails </div>
-<p>Refer a Friend to Thumbrio That Becomes a Customer - Capping out at 1 Friend</p>
+<div class="price">15% Off</div>
+<p>Refer a Friend</p>
 </div>
 </div>
 </section>
@@ -306,32 +334,35 @@ color:#777;
 </div>
 
 <script>
-// BEFORE AFTER SLIDER
-const slider = document.getElementById('slider');
-const beforeImg = document.getElementById('beforeImg');
+// MODAL
+function openModal(){
+document.getElementById("portfolioModal").style.display="block";
+}
+function closeModal(){
+document.getElementById("portfolioModal").style.display="none";
+}
+window.onclick=function(e){
+let modal=document.getElementById("portfolioModal");
+if(e.target==modal){modal.style.display="none";}
+}
 
-let isDragging = false;
+// SLIDER
+const slider=document.getElementById('slider');
+const beforeImg=document.getElementById('beforeImg');
+let isDragging=false;
 
-slider.addEventListener('mousedown', (e) => {
-  isDragging = true;
-  e.preventDefault();
-});
+slider.addEventListener('mousedown',()=>isDragging=true);
+window.addEventListener('mouseup',()=>isDragging=false);
 
-window.addEventListener('mouseup', () => isDragging = false);
-
-window.addEventListener('mousemove', (e) => {
-  if (!isDragging) return;
-
-  const rect = slider.parentElement.getBoundingClientRect();
-  let x = e.clientX - rect.left;
-
-  if (x < 0) x = 0;
-  if (x > rect.width) x = rect.width;
-
-  let percent = (x / rect.width) * 100;
-
-  slider.style.left = percent + '%';
-  beforeImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+window.addEventListener('mousemove',(e)=>{
+if(!isDragging)return;
+const rect=slider.parentElement.getBoundingClientRect();
+let x=e.clientX-rect.left;
+if(x<0)x=0;
+if(x>rect.width)x=rect.width;
+let percent=(x/rect.width)*100;
+slider.style.left=percent+'%';
+beforeImg.style.clipPath=`inset(0 ${100-percent}% 0 0)`;
 });
 </script>
 
