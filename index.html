@@ -344,6 +344,49 @@ border-radius:50%;
 border:5px solid white;
 }
 
+.pricing-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  margin-top: 40px;
+}
+
+.pricing-card {
+  background: #111;
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid #1f1f1f;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.pricing-card:hover {
+  transform: translateY(-5px);
+  border-color: #facc15;
+}
+
+.pricing-card h3 {
+  margin-bottom: 10px;
+}
+
+.price {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #facc15;
+  margin: 15px 0;
+}
+
+.pricing-card ul {
+  list-style: none;
+  margin: 15px 0;
+  padding: 0;
+}
+
+.pricing-card li {
+  margin: 5px 0;
+  color: #9ca3af;
+}
+
 /* FOOTER */
 .footer{
 text-align:center;
@@ -454,6 +497,46 @@ color:#777;
 <div class="compare-label label-after">AFTER</div>
 <div class="slider" id="slider"></div>
 </div>
+</section>
+
+<section class="section" id="pricing">
+  <h2>Pricing</h2>
+
+  <div class="pricing-container">
+
+    <div class="pricing-card">
+      <h3>Single Thumbnail</h3>
+      <p class="price">$5</p>
+      <p>One custom thumbnail designed for your content.</p>
+      <ul>
+        <li>✔ Custom Thumbnail</li>
+      <ul>
+    </div>
+
+    <div class="pricing-card">
+      <h3>Monthly Plan</h3>
+      <p class="price">$70 / month</p>
+      <p>Unlimited thumbnails for 30 days.</p>
+      <ul>
+        <li>✔ Unlimited requests</li>
+        <li>✔ Priority delivery</li>
+      </ul>
+    </div>
+
+    <div class="pricing-card">
+      <h3>Referral Bonus</h3>
+      <p class="price">Rewards</p>
+      <p>Refer a friend and get:</p>
+      <ul>
+        <li>✔ 5 free thumbnails</li>
+        <li>✔ 15% discount</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+  </div>
 </section>
 
 <section id="contact" class="section">
