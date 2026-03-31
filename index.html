@@ -7,10 +7,17 @@
 
 <link rel="icon" href="https://raw.githubusercontent.com/thumbrio/thumbnails/main/bluefaticon.png">
 
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 body{background:#0a0a0a;color:#f5f5f5;scroll-behavior:smooth;}
 a{text-decoration:none;color:inherit;}
+
+h1,h2,h3{font-family:'Montserrat',sans-serif;}
+
+h1{font-weight:800;}
+h2{font-weight:700;}
 
 /* NAV */
 nav{
@@ -24,9 +31,26 @@ background:#0a0a0a;
 border-bottom:1px solid #1f1f1f;
 z-index:1000;
 }
-nav .logo{font-weight:700;}
+
 nav .links{display:flex;gap:30px;}
+nav a{position:relative;transition:0.3s;}
 nav a:hover{color:#facc15;}
+
+nav a::after{
+content:'';
+position:absolute;
+left:0;
+bottom:-5px;
+width:0;
+height:2px;
+background:#facc15;
+transition:0.3s;
+}
+nav a:hover::after{width:100%;}
+
+html {
+  scroll-behavior: smooth;
+}
 
 /* HERO */
 header{
@@ -38,10 +62,18 @@ padding:0 80px;
 gap:50px;
 }
 
-.hero-text h1{
-font-size:4.5rem;
-margin-bottom:20px;
+.hero-text h1 {
+  font-size: 4.5rem;
+  font-weight: 700;
+  line-height: 1.2;
 }
+
+@media (max-width: 768px) {
+  .hero-text h1 {
+    font-size: 2.2rem;
+  }
+}
+
 .hero-text p{
 font-size:1.3rem;
 color:#9ca3af;
@@ -55,24 +87,45 @@ border-radius:8px;
 background:#facc15;
 color:black;
 font-weight:600;
-transition:0.3s;
 display:inline-block;
+transition:0.25s;
+box-shadow:0 4px 15px rgba(250,204,21,0.25);
 }
+
+.button:hover{
+transform:translateY(-3px) scale(1.05);
+box-shadow:0 8px 25px rgba(250,204,21,0.35);
+}
+
+.button:active{
+transform:scale(0.97);
+box-shadow:0 2px 8px rgba(250,204,21,0.2);
+}
+
 .button.secondary{
 background:transparent;
-border:1px solid #333;
-color:#f5f5f5;
+border:1px solid #facc15;
+color:#facc15;
 margin-left:15px;
 }
-.button:hover{transform:translateY(-3px);}
+
+.button.secondary:hover{
+background:#facc15;
+color:black;
+}
+
+button, .button {
+  cursor: pointer;
+}
 
 /* HERO IMAGE */
 .hero-preview{
-width:500px;
-height:280px;
+width:575px;
+height:322px;
 border-radius:12px;
 overflow:hidden;
 }
+
 .hero-preview img{
 width:100%;
 height:100%;
@@ -81,13 +134,17 @@ object-fit:cover;
 
 /* SECTION */
 .section{padding:120px 60px;}
-.section h2{font-size:2.5rem;margin-bottom:40px;}
+.section h2{
+font-size:3.2rem;
+font-weight:800;
+letter-spacing:1px;
+text-transform:uppercase;
+margin-bottom:40px;
+}
 
 /* SERVICE */
 .service-box h3{font-size:2rem;margin-bottom:15px;}
 .service-box p{font-size:1.3rem;color:#9ca3af;line-height:1.8;}
-.service-list{margin-top:20px;}
-.service-list li{margin-bottom:10px;}
 
 /* PORTFOLIO */
 .gallery{
@@ -95,58 +152,164 @@ display:grid;
 grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
 gap:25px;
 }
-.gallery img{
+
+.thumb-inner {
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.thumb-inner img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.thumb-inner img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+.thumb{
+position:relative;
+border-radius:12px;
+overflow:visible;
+cursor:pointer;
+}
+
+.thumb img{
 width:100%;
 aspect-ratio:16/9;
 object-fit:cover;
-border-radius:12px;
+transition:0.4s;
+}
+
+.thumb img {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.thumb img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+.overlay{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+opacity:0;
+color:white;
+font-weight:600;
 transition:0.3s;
-cursor:pointer;
-}
-.gallery img:hover{
-transform:scale(1.05);
-box-shadow:0 0 25px rgba(0,0,0,0.7);
+z-index:2;
 }
 
-/* MODAL */
-.modal{
-display:none;
-position:fixed;
-z-index:2000;
-left:0;
-top:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.75);
+.thumb:hover .overlay{opacity:1;}
+
+/* MODAL (GALLERY) */
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  justify-content: center;
+  align-items: center;
 }
 
-.modal-content{
-background:#0a0a0a;
-margin:5% auto;
-padding:30px;
-width:80%;
-max-width:1000px;
-border-radius:12px;
+.modal-content {
+  position: relative;
+  background: #111;
+  padding: 40px;
+  border-radius: 12px;
+  width: 95%;
+  max-width: 1800px;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
-.close{
-float:right;
-font-size:30px;
-cursor:pointer;
+.modal-title {
+  margin-bottom: 20px;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.modal-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* BIGGER */
+  gap: 30px;
+}
+
+.modal-gallery img {
+  width: 100%;
+  border-radius: 10px;
+  display: block;
+}
+
+#closeGallery {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 2rem;
+  cursor: pointer;
 }
 
 /* BEFORE AFTER */
-.compare-container{
-position:relative;
-max-width:700px;
-margin:auto;
-overflow:hidden;
-border-radius:12px;
+
+.compare-label{
+  position:absolute;
+  top:10px;
+  padding:6px 12px;
+  background:rgba(0,0,0,0.6);
+  border-radius:6px;
+  font-size:0.9rem;
+  z-index:3;
 }
 
-.compare-container img{
-width:100%;
-display:block;
+.label-before{left:10px;}
+.label-after{right:10px;}
+
+.compare-container,
+.compare-container * {
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.compare-container img {
+  pointer-events: none;
+}
+
+.compare-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  height: 500px;
+  margin: auto;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  .compare-container {
+    height: 300px;
+  }
+}
+
+.compare-container img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .img-before{
@@ -155,7 +318,7 @@ top:0;
 left:0;
 height:100%;
 width:100%;
-clip-path: inset(0 50% 0 0);
+clip-path:inset(0 50% 0 0);
 }
 
 .slider{
@@ -166,7 +329,6 @@ width:7px;
 height:100%;
 background:#facc15;
 cursor:ew-resize;
-z-index:2;
 }
 
 .slider::after{
@@ -174,39 +336,13 @@ content:'';
 position:absolute;
 top:50%;
 left:50%;
-transform:translate(-50%, -50%);
+transform:translate(-50%,-50%);
 width:40px;
 height:40px;
 background:#facc15;
 border-radius:50%;
 border:5px solid white;
 }
-
-.compare-label{
-position:absolute;
-top:10px;
-padding:6px 12px;
-background:rgba(0,0,0,0.6);
-border-radius:6px;
-font-size:0.9rem;
-}
-
-.label-before{left:10px;}
-.label-after{right:10px;}
-
-/* PRICING */
-.pricing{display:flex;gap:30px;flex-wrap:wrap;}
-.card{
-flex:1;
-min-width:250px;
-padding:30px;
-border:1px solid #1f1f1f;
-border-radius:12px;
-transition:0.3s;
-}
-.card.featured{border:2px solid #facc15;}
-.card:hover{transform:translateY(-5px);}
-.price{font-size:2rem;margin:10px 0;color:#facc15;}
 
 /* FOOTER */
 .footer{
@@ -232,7 +368,7 @@ color:#777;
 
 <header id="home">
 <div class="hero-text">
-<h1>Thumbnails That Get Clicks.</h1>
+<h1>Get More Views With Better Thumbnails</h1>
 <p>I design high-converting thumbnails that make your content stand out.</p>
 
 <a href="#contact" class="button">Get Started</a>
@@ -240,11 +376,10 @@ color:#777;
 </div>
 
 <div class="hero-preview">
-<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/FortniteThumb.jpg">
+<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/fortniterankedthumb.jpg">
 </div>
 </header>
 
-<!-- SERVICE -->
 <section id="service" class="section">
 <h2>What I Do</h2>
 <div class="service-box">
@@ -259,71 +394,68 @@ color:#777;
 </div>
 </section>
 
-<!-- PORTFOLIO -->
 <section id="portfolio" class="section">
 <h2>My Work</h2>
+
 <div class="gallery">
-<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/fortnite.jpg" onclick="openModal()">
-<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/New_Thumbnail____1-thumbnail.jpg" onclick="openModal()">
-<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/FortniteThumb.jpg" onclick="openModal()">
+
+<div class="thumb">
+ <div class="thumb-inner">
+<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/fortnitenewseason.jpg">
+ </div>
 </div>
+<div class="thumb">
+ <div class="thumb-inner">
+<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/minecraftday1-100.jpg">
+ </div>
+</div>
+
+<div class="thumb">
+ <div class="thumb-inner">
+<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/fortniterankedthumb.jpg">
+ </div>
+</div>
+
+</div>
+
+<div style="text-align:center; margin-top:30px;">
+<button class="button" onclick="openGalleryModal()">View More</button>
+</div>
+
 </section>
 
-<!-- MODAL -->
-<div id="portfolioModal" class="modal">
-<div class="modal-content">
-<span class="close" onclick="closeModal()">&times;</span>
-<h2>Full Portfolio</h2>
+<!-- GALLERY MODAL -->
+<div id="galleryModal" class="modal">
+  <div class="modal-content">
 
-<div class="gallery">
-<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/fortnite.jpg">
-<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/New_Thumbnail____1-thumbnail.jpg">
-<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/FortniteThumb.jpg">
-<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/New_Thumbnail-thumbnail%20(4).jpg">
-<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/New_Thumbnail-thumbnail%20(6).jpg">
+    <span id="closeGallery">&times;</span>
+
+    <h2 class="modal-title">Portfolio</h2>
+
+    <div class="modal-gallery">
+      <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/fortnitenewseason.jpg">
+      <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/inanutshellsample2.jpg">
+      <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/minecraftday1-100.jpg">
+      <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/inanutshellsample1.jpg">
+      <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/fortniterankedthumb.jpg">
+      <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/inanutshellsample3.jpg">
+      <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/minecraftcarrotvsapple.jpg">
+    </div>
+
+  </div>
 </div>
 
-</div>
-</div>
-
-<!-- BEFORE AFTER -->
 <section class="section">
 <h2>Before vs After</h2>
-
 <div class="compare-container">
-<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/New_Thumbnail-thumbnail%20(6).jpg">
-<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/New_Thumbnail-thumbnail%20(4).jpg" class="img-before" id="beforeImg">
+<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/afterthumb.jpg">
+<img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/beforethumb.jpg" class="img-before" id="beforeImg">
 <div class="compare-label label-before">BEFORE</div>
 <div class="compare-label label-after">AFTER</div>
 <div class="slider" id="slider"></div>
 </div>
 </section>
 
-<!-- PRICING -->
-<section id="pricing" class="section">
-<h2>Pricing</h2>
-<div class="pricing">
-<div class="card">
-<h3>Per Thumbnail</h3>
-<div class="price">$5</div>
-<p>Single Thumbnail</p>
-</div>
-
-<div class="card featured">
-<h3>Monthly</h3>
-<div class="price">$70/mth</div>
-<p>Best Value</p>
-</div>
-
-<div class="card">
-<h3>Referral Discount</h3>
-<div class="price">15% Off</div>
-<p>Refer a Friend</p>
-</div>
-</div>
-</section>
-
-<!-- CONTACT -->
 <section id="contact" class="section">
 <h2>Contact Me</h2>
 <a href="https://discord.com/users/1481424019600314531" class="button">Order on Discord</a>
@@ -334,35 +466,49 @@ color:#777;
 </div>
 
 <script>
-// MODAL
-function openModal(){
-document.getElementById("portfolioModal").style.display="block";
-}
-function closeModal(){
-document.getElementById("portfolioModal").style.display="none";
-}
-window.onclick=function(e){
-let modal=document.getElementById("portfolioModal");
-if(e.target==modal){modal.style.display="none";}
+const galleryModal = document.getElementById("galleryModal");
+const closeGallery = document.getElementById("closeGallery");
+
+function openGalleryModal(){
+  galleryModal.style.display = "flex";
+  document.body.style.overflow = "hidden";
 }
 
-// SLIDER
-const slider=document.getElementById('slider');
-const beforeImg=document.getElementById('beforeImg');
-let isDragging=false;
+closeGallery.onclick = () => {
+  galleryModal.style.display = "none";
+  document.body.style.overflow = "auto";
+};
 
-slider.addEventListener('mousedown',()=>isDragging=true);
-window.addEventListener('mouseup',()=>isDragging=false);
+window.addEventListener("click", function(e){
+  if (e.target === galleryModal) {
+    galleryModal.style.display = "none";
+    document.body.style.overflow = "auto";
+  }
+});
 
-window.addEventListener('mousemove',(e)=>{
-if(!isDragging)return;
-const rect=slider.parentElement.getBoundingClientRect();
-let x=e.clientX-rect.left;
-if(x<0)x=0;
-if(x>rect.width)x=rect.width;
-let percent=(x/rect.width)*100;
-slider.style.left=percent+'%';
-beforeImg.style.clipPath=`inset(0 ${100-percent}% 0 0)`;
+const slider = document.getElementById('slider');
+const beforeImg = document.getElementById('beforeImg');
+
+let isDragging = false;
+
+slider.addEventListener('mousedown', () => isDragging = true);
+window.addEventListener('mouseup', () => isDragging = false);
+
+window.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+
+  const container = slider.parentElement;
+  const rect = container.getBoundingClientRect();
+
+  let x = e.clientX - rect.left;
+
+  if (x < 0) x = 0;
+  if (x > rect.width) x = rect.width;
+
+  let percent = (x / rect.width) * 100;
+
+  slider.style.left = percent + '%';
+  beforeImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
 });
 </script>
 
