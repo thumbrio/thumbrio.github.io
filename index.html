@@ -387,6 +387,163 @@ border:5px solid white;
   color: #9ca3af;
 }
 
+/* REVIEWS SECTION */
+.reviews-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  margin-top: 40px;
+  align-items: start;
+}
+
+.review-card {
+  background: #111;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #1f1f1f;
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  font-size: 14px;
+}
+.review-name {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+#featuredReviews {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  height: 100%;
+}
+
+.stars {
+  color: #facc15;
+  margin-bottom: 8px;
+}
+
+/* STATS BOX */
+.review-stats {
+  align-self: start;
+  background: #111;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #1f1f1f;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.label {
+  width: 40px;
+  flex-shrink: 0;
+}
+
+.bar {
+  flex: 1;
+  height: 8px;
+  background: #222;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  width: 0%;
+  background: #facc15;
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+.count {
+  width: 30px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.view-more {
+  text-align: right;
+  font-size: 0.9rem;
+  color: #888;
+  cursor: pointer;
+}
+
+/* FORM */
+.review-form textarea,
+.review-form input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background: #111;
+  border: 1px solid #1f1f1f;
+  color: white;
+  border-radius: 8px;
+}
+
+.star-input span {
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #555;
+}
+
+.star-input span.active {
+  color: #facc15;
+}
+
+/* MODAL */
+.review-modal {
+  display: none;
+  position: fixed;
+  z-index: 3000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.review-modal-content {
+  background: #111;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.review-modal-content h2 {
+  margin-bottom: 25px;
+}
+
+.review-modal-content .review-card {
+  margin-bottom: 15px;
+}
+
 /* FOOTER */
 .footer{
 text-align:center;
@@ -403,6 +560,7 @@ color:#777;
 <div class="logo">Thumbrio</div>
 <div class="links">
 <a href="#home">Home</a>
+<a href="#reviews">Reviews</a>
 <a href="#service">Service</a>
 <a href="#portfolio">Portfolio</a>
 <a href="#contact">Contact</a>
@@ -423,6 +581,93 @@ color:#777;
 </div>
 </header>
 
+<section id="reviews" class="section">
+  <h2>Client Reviews</h2>
+
+ <div class="reviews-grid">
+
+  <!-- LEFT: FEATURED REVIEWS -->
+  <div id="featuredReviews"></div>
+
+  <!-- RIGHT: STATS -->
+  <div class="review-stats">
+
+  <div class="stat-row" data-rating="5">
+  <span class="label">5★</span>
+  <div class="bar">
+    <div class="bar-fill"></div>
+  </div>
+  <span class="count">0</span>
+</div>
+
+<div class="stat-row" data-rating="4">
+  <span class="label">4★</span>
+  <div class="bar">
+    <div class="bar-fill"></div>
+  </div>
+  <span class="count">0</span>
+</div>
+
+<div class="stat-row" data-rating="3">
+  <span class="label">3★</span>
+  <div class="bar">
+    <div class="bar-fill"></div>
+  </div>
+  <span class="count">0</span>
+</div>
+
+<div class="stat-row" data-rating="2">
+  <span class="label">2★</span>
+  <div class="bar">
+    <div class="bar-fill"></div>
+  </div>
+  <span class="count">0</span>
+</div>
+
+<div class="stat-row" data-rating="1">
+  <span class="label">1★</span>
+  <div class="bar">
+    <div class="bar-fill"></div>
+  </div>
+  <span class="count">0</span>
+</div>
+
+      <div class="view-more" onclick="openReviewModal()">View more →</div>
+
+      <!-- FORM -->
+      <form action="https://formspree.io/f/mlgoarrd" method="POST" class="review-form" onsubmit="showThanks()">
+
+        <input type="text" name="name" placeholder="Username (e.g. @jake)" required>
+
+	<input type="text" name="channel" placeholder="Channel Name (e.g. JakePlays)" required>
+	
+	<input type="hidden" name="_subject" value="New Thumbrio Review">
+
+        <div class="star-input" id="starInput">
+          <span data-value="1">★</span>
+          <span data-value="2">★</span>
+          <span data-value="3">★</span>
+          <span data-value="4">★</span>
+          <span data-value="5">★</span>
+        </div>
+
+        <input type="hidden" name="rating" id="ratingValue">
+
+        <textarea name="review" placeholder="Write your review..." required></textarea>
+
+        <button class="button">Submit</button>
+
+        <p id="thanksMsg" style="display:none; color:#facc15; font-size:0.9rem; margin-top:10px;">
+          Thanks for your review!
+        </p>
+
+      </form>
+
+    </div>
+
+  </div>
+</section>
+
 <section id="service" class="section">
 <h2>What I Do</h2>
 <div class="service-box">
@@ -430,7 +675,7 @@ color:#777;
 <p>I create thumbnails designed to maximize clicks using bold visuals, contrast, and proven styles.</p>
 <ul class="service-list">
 <li>✔ Custom for your content</li>
-<li>✔ Optimized for mobile</li>
+<li>✔ Optimized for CTR</li>
 <li>✔ Fast turnaround</li>
 <li>✔ Clean design</li>
 </ul>
@@ -483,6 +728,10 @@ color:#777;
       <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/fortniterankedthumb.jpg">
       <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/inanutshellsample3.jpg">
       <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/minecraftcarrotvsapple.jpg">
+      <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/gamingpcrealistic.jpg">
+      <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/itssof_ckingsimplethumb.jpg">
+      <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/musicindustrythumb.jpg">
+      <img src="https://raw.githubusercontent.com/thumbrio/thumbnails/main/robloxparanormal.jpg">
     </div>
 
   </div>
@@ -499,6 +748,15 @@ color:#777;
 </div>
 </section>
 
+<div class="review-modal" id="reviewModal">
+  <div class="review-modal-content">
+    <span onclick="closeReviewModal()" style="cursor:pointer; float:right;">&times;</span>
+    <h2>All Reviews</h2>
+
+    <div id="allReviewsContainer"></div>
+  </div>
+</div>
+
 <section class="section" id="pricing">
   <h2>Pricing</h2>
 
@@ -509,8 +767,8 @@ color:#777;
       <p class="price">$5</p>
       <p>One custom thumbnail designed for your content.</p>
       <ul>
-        <li>✔ Custom Thumbnail</li>
-      <ul>
+        <li>✔ 1 Custom Thumbnail</li>
+      </ul>
     </div>
 
     <div class="pricing-card">
@@ -526,7 +784,7 @@ color:#777;
     <div class="pricing-card">
       <h3>Referral Bonus</h3>
       <p class="price">Rewards</p>
-      <p>Refer a friend and get:</p>
+      <p>Refer a paying friend and get:</p>
       <ul>
         <li>✔ 5 free thumbnails</li>
         <li>✔ 15% discount</li>
@@ -549,17 +807,133 @@ color:#777;
 </div>
 
 <script>
+ 
+function renderReviews(data) {
+  const container = document.getElementById("allReviewsContainer");
+  container.innerHTML = "";
+
+  data.forEach(r => {
+    const div = document.createElement("div");
+    div.className = "review-card";
+
+    div.innerHTML = `
+  <div class="review-header">
+    <div class="avatar" style="background:${getColorFromName(r.name)}">
+      ${getInitials(r.name)}
+    </div>
+    <div class="review-name">${r.name} (${r.channel})</div>
+  </div>
+  <div class="stars">${"★".repeat(r.rating)}</div>
+  <p>${r.review}</p>
+`;
+
+    container.appendChild(div);
+  });
+}
+
+function getInitials(name) {
+  if (!name) return "?";
+  return name.charAt(0).toUpperCase();
+}
+
+function getColorFromName(name) {
+  const colors = [
+    "#ef4444", "#f59e0b", "#10b981",
+    "#3b82f6", "#8b5cf6", "#ec4899",
+    "#22c55e", "#eab308"
+  ];
+
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  const index = Math.abs(hash) % colors.length;
+  return colors[index];
+}
+
+// STAR SELECT
+const stars = document.querySelectorAll("#starInput span");
+const ratingValue = document.getElementById("ratingValue");
+
+stars.forEach(star => {
+  star.addEventListener("click", () => {
+    let val = star.getAttribute("data-value");
+    ratingValue.value = val;
+
+    stars.forEach(s => s.classList.remove("active"));
+    for (let i = 0; i < val; i++) {
+      stars[i].classList.add("active");
+    }
+  });
+});
+
+// THANK YOU MESSAGE
+function showThanks(){
+  document.getElementById("thanksMsg").style.display = "block";
+}
+
+// MODAL
+async function fetchReviewsFromSheets() {
+  try {
+    const res = await fetch("https://script.google.com/macros/s/AKfycbwhha7tuOmafVtIar-WXAJCRttkQv8t2zSFGd-wtWjJ0HhRjbt4R485gYkW9Nr3FQgaPA/exec");
+    return await res.json();
+  } catch (err) {
+    console.log("Fetch error:", err);
+    return [];
+  }
+}
+
+function openReviewModal(){
+  const modal = document.getElementById("reviewModal");
+  modal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+  document.body.style.position = "fixed";
+  document.body.style.width = "100%";
+}
+
+async function loadReviewsAndStats() {
+  const statsBox = document.querySelector(".review-stats");
+
+  // show instantly
+  statsBox.style.opacity = "1";
+
+  // optional: show empty state immediately
+  renderStats([]);
+
+  const reviews = await fetchReviewsFromSheets();
+
+  renderReviews(reviews);
+  renderStats(reviews);
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  loadReviewsAndStats();
+  renderManualFeaturedReviews();
+});
+
+function closeReviewModal(){
+  document.getElementById("reviewModal").style.display = "none";
+  document.body.style.overflow = "auto";
+  document.body.style.position = "";
+  document.body.style.width = "";
+}
+
 const galleryModal = document.getElementById("galleryModal");
 const closeGallery = document.getElementById("closeGallery");
 
 function openGalleryModal(){
   galleryModal.style.display = "flex";
   document.body.style.overflow = "hidden";
+  document.body.style.position = "fixed";
+  document.body.style.width = "100%";
 }
 
 closeGallery.onclick = () => {
   galleryModal.style.display = "none";
   document.body.style.overflow = "auto";
+  document.body.style.position = "";
+  document.body.style.width = "";
 };
 
 window.addEventListener("click", function(e){
@@ -568,6 +942,36 @@ window.addEventListener("click", function(e){
     document.body.style.overflow = "auto";
   }
 });
+
+function renderStats(reviews) {
+  const stats = {
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0
+  };
+
+  reviews.forEach(r => {
+    const rating = parseInt(r.rating);
+    if (stats[rating] !== undefined) {
+      stats[rating]++;
+    }
+  });
+
+  const total = reviews.length || 1;
+
+  for (let i = 1; i <= 5; i++) {
+    const count = stats[i];
+    const percent = (count / total) * 100;
+
+    const row = document.querySelector(`.stat-row[data-rating="${i}"]`);
+    if (row) {
+      row.querySelector(".bar-fill").style.width = percent + "%";
+      row.querySelector(".count").textContent = count;
+    }
+  }
+}
 
 const slider = document.getElementById('slider');
 const beforeImg = document.getElementById('beforeImg');
@@ -593,6 +997,71 @@ window.addEventListener('mousemove', (e) => {
   slider.style.left = percent + '%';
   beforeImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
 });
+
+const form = document.querySelector(".review-form");
+
+form.addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const formData = new FormData(form);
+
+  // Send to Google Sheets
+  try {
+    await fetch("https://script.google.com/macros/s/AKfycbwhha7tuOmafVtIar-WXAJCRttkQv8t2zSFGd-wtWjJ0HhRjbt4R485gYkW9Nr3FQgaPA/exec", {
+      method: "POST",
+      body: formData
+    });
+  } catch (err) {
+    console.log("Sheets error:", err);
+  }
+
+  // Send to Formspree
+  try {
+    await fetch(form.action, {
+      method: "POST",
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    });
+  } catch (err) {
+    console.log("Formspree error:", err);
+  }
+
+  showThanks();
+  form.reset();
+});
+
+const featuredReviewsData = [
+  {
+    name: "@bebopflash",
+    channel: "BYC",
+    rating: 5,
+    review: "Highly recommend if your looking for a thumbnail designer to get you exactly what you want and how you want it great quality and highly impressed by the skills that he possess and the delivery time is amazing just like you want it and he's is very communicative throughout the process just makes u as the client feel comfortable in who your working with again highly recommend and one of the best designers I have worked with when it comes to the straight design as well as the delivery time and the communication everything just great!"
+  },
+];
+
+function renderManualFeaturedReviews() {
+  const container = document.getElementById("featuredReviews");
+  container.innerHTML = "";
+
+  featuredReviewsData.forEach(r => {
+    const div = document.createElement("div");
+    div.className = "review-card";
+
+    div.innerHTML = `
+      <div class="review-header">
+        <div class="avatar" style="background:${getColorFromName(r.name)}">
+          ${getInitials(r.name)}
+        </div>
+        <div class="review-name">${r.name} (${r.channel})</div>
+      </div>
+      <div class="stars">${"★".repeat(r.rating)}</div>
+      <p>${r.review}</p>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
 </script>
 
 </body>
